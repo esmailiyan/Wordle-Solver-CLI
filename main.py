@@ -12,6 +12,8 @@ class Game:
         for line in lines:
             self.words.append(line.strip())
     def update(self, suggest, result):
+        if result == "ggggg":
+            self.end = True
         for i in range(5):
             if result[i] == 'g':
                 self.fix = self.fix[:i] + suggest[i] + self.fix[i+1:]
@@ -41,7 +43,12 @@ class Game:
     def suggest(self):
         pass
     def play(self):
-        pass
+        while not self.end:
+            self.filter()
+            suggestion = self.suggest()
+            result = input("Inter Result [y/g/b]: ")
+            self.update(suggestion, result)
+
 
 if __name__ == "__main__":
     game = Game()
