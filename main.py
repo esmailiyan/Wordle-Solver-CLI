@@ -1,3 +1,5 @@
+import numpy as np
+
 class Game:
     def __init__(self):
         self.words = []
@@ -49,7 +51,7 @@ class Game:
                 value = self.likely(word)
                 suggest = word
         # print(self.filtered_words)
-        print(f"I',m Suggesting [{suggest}]")
+        # print(f"I',m Suggesting [{suggest}]")
         return suggest
     def play(self):
         while not self.end:
@@ -102,23 +104,69 @@ class Game:
             if flag:
                 altern_words.append(word)
 
-        limited_words = []
+        if len(altern_words) == 0:
+            return self.suggest()
+
         value = 0
-        suggestion = ""
+        suggestion = "-----"
         for word in altern_words:
             score = 0
             for c in possible_char:
                 if c in word:
                     score += 1
-            if score > value: # or (score == value and self.likely(suggestion) < self.likely(word))
+            if score > value or (score == value and self.likely(suggestion) < self.likely(word)):
                 value = score
                 suggestion = word
 
         # print(self.filtered_words)
-        print(f"I',m Suggesting(Alt) [{suggestion}]")
+        # print(f"I',m Suggesting(Alt) [{suggestion}]")
         return suggestion
 
+class Test:
+    def __init__(self):
+        self.result = []
+    def run(self):
+        words = []
+        with open('word.txt', 'r') as file:
+            lines = file.readlines()
+        for line in lines:
+            words.append(line.strip())
+        sum = 0
+        cnt = 0
+        for word in words:
+            turn = 0
+            game = Game()
+            game.read_words('word.txt')
+            # print("SELECTED WORD:", word)
+            while not game.end:
+                result = "?????"
+                turn += 1
+                game.filter()
+                suggestion = ""
+                if turn == 1 or len(game.filtered_words) == 1:
+                    if turn == 1:
+                        suggestion = "STARE"
+                    else:
+                        suggestion = game.suggest()
+                else:
+                    suggestion = game.suggest_altern()
+
+                for i in range(5):
+                    if suggestion[i] == word[i]:
+                        result = result[:i] + 'g' + result[i+1:]
+                    elif suggestion[i] in word:
+                        result = result[:i] + 'y' + result[i+1:]
+                    else:
+                        result = result[:i] + 'b' + result[i+1:]
+                # print("RESULT:", result)
+                game.update(suggestion, result)
+            sum += turn 
+            cnt += 1
+            print(cnt, word, turn, sum/cnt)
+
 if __name__ == "__main__":
-    game = Game()
-    game.read_words('word.txt')
-    game.play()
+    test = Test()
+    test.run()
+    # game = Game()
+    # game.read_words('word.txt')
+    # game.play()
