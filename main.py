@@ -57,17 +57,17 @@ class Game:
             suggestion = ""
             
             if self.turn == 1:
-                suggestion = game.suggest()
-            elif len(game.filtered_words) == 1:
-                suggestion = game.suggest()
+                suggestion = self.suggest()
+            elif len(self.filtered_words) == 1:
+                suggestion = self.suggest()
             elif self.fix.count('-') > 3:
-                suggestion = game.suggest()
+                suggestion = self.suggest()
             else :
                 cmd = input("Do you want to use Alternative Strategy? [yes/no]: ")
                 if cmd == "yes":
-                    suggestion = game.suggest_altern()
+                    suggestion = self.suggest_altern()
                 else:
-                    suggestion = game.suggest()
+                    suggestion = self.suggest()
 
             result = input("Inter Result [y/g/b]: ")
             self.update(suggestion, result)
