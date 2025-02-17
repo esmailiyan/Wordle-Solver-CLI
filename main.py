@@ -50,7 +50,6 @@ class Game:
             if self.likely(word) > value:
                 value = self.likely(word)
                 suggest = word
-        # print(self.filtered_words)
         # print(f"I',m Suggesting [{suggest}]")
         return suggest
     def play(self):
@@ -58,10 +57,10 @@ class Game:
             self.turn += 1
             self.filter()
             suggestion = ""
-            if self.turn == 1 or len(self.filtered_words) == 1:
-                suggestion = self.suggest()
+            if turn == 1 or len(game.filtered_words) == 1 or game.fix.count('-') <= 4:
+                suggestion = game.suggest()
             else:
-                suggestion = self.suggest_altern()
+                suggestion = game.suggest_altern()
             result = input("Inter Result [y/g/b]: ")
             self.update(suggestion, result)
     def likely(self, word):
@@ -108,7 +107,7 @@ class Game:
             return self.suggest()
 
         value = 0
-        suggestion = "-----"
+        suggestion = ""
         for word in altern_words:
             score = 0
             for c in possible_char:
@@ -118,7 +117,6 @@ class Game:
                 value = score
                 suggestion = word
 
-        # print(self.filtered_words)
         # print(f"I',m Suggesting(Alt) [{suggestion}]")
         return suggestion
 
@@ -143,7 +141,7 @@ class Test:
                 turn += 1
                 game.filter()
                 suggestion = ""
-                if turn == 1 or len(game.filtered_words) == 1:
+                if turn == 1 or len(game.filtered_words) == 1 or game.fix.count('-') <= 4:
                     if turn == 1:
                         suggestion = "STARE"
                     else:
