@@ -20,9 +20,24 @@ class Game:
         for i in range(5):
             if result[i] == 'b' and suggest[i] not in self.fix:
                 self.not_have.append(suggest[i])
-        print(self.fix)
     def filter(self):
-        pass
+        self.filtered_words = []
+        for word in self.words:
+            flag = True
+            for i in range(5):
+                if self.fix[i] != '-' and word[i] != self.fix[i]:
+                    flag = False
+                    break
+            for (x, i) in self.have:
+                if x not in word or word[i] == x:
+                    flag = False
+                    break
+            for x in self.not_have:
+                if x in word:
+                    flag = False
+                    break
+            if flag:
+                self.filtered_words.append(word)
     def suggest(self):
         pass
     def play(self):
