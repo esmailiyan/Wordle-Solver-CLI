@@ -7,8 +7,13 @@ class Game:
         self.have = []
         self.not_have = []
         self.end = False
+
     def read_words(self, database):
-        pass 
+        with open(database, 'r') as file:
+            lines = file.readlines()
+        for line in lines:
+            self.words.append(line.strip())
+
     def update(self, result):
         pass
     def filter(self):
@@ -20,4 +25,5 @@ class Game:
 
 if __name__ == "__main__":
     game = Game()
+    game.read_words('word.txt')
     game.play()
