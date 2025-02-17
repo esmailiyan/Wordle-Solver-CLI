@@ -6,6 +6,7 @@ class Game:
         self.have = []
         self.not_have = []
         self.end = False
+        self.turn = 0
     def read_words(self, database):
         with open(database, 'r') as file:
             lines = file.readlines()
@@ -47,12 +48,18 @@ class Game:
             if self.likely(word) > value:
                 value = self.likely(word)
                 suggest = word
+        # print(self.filtered_words)
         print(f"I',m Suggesting [{suggest}]")
         return suggest
     def play(self):
         while not self.end:
+            self.turn += 1
             self.filter()
-            suggestion = self.suggest()
+            suggestion = ""
+            if self.turn == 1 or len(self.filtered_words) == 1:
+                suggestion = self.suggest()
+            else:
+                suggestion = self.suggest_altern()
             result = input("Inter Result [y/g/b]: ")
             self.update(suggestion, result)
     def likely(self, word):
@@ -73,6 +80,43 @@ class Game:
                 if word[i] in a:
                     sum += 1.5
         return sum
+    def suggest_altern(self):
+        possible_char = []
+        for word in self.filtered_words:
+            for i in range(5):
+                if self.fix[i] == '-':
+                    possible_char.append(word[i])
+        possible_char = list(set(possible_char))
+
+        altern_words = []
+        for word in self.words:
+            flag = True
+            for (x, i) in self.have:
+                if x not in word or word[i] == x or self.fix[word.find(x)] != '-':
+                    flag = False
+                    break
+            for x in self.not_have:
+                if x in word:
+                    flag = False
+                    break
+            if flag:
+                altern_words.append(word)
+
+        limited_words = []
+        value = 0
+        suggestion = ""
+        for word in altern_words:
+            score = 0
+            for c in possible_char:
+                if c in word:
+                    score += 1
+            if score > value: # or (score == value and self.likely(suggestion) < self.likely(word))
+                value = score
+                suggestion = word
+
+        # print(self.filtered_words)
+        print(f"I',m Suggesting(Alt) [{suggestion}]")
+        return suggestion
 
 if __name__ == "__main__":
     game = Game()
