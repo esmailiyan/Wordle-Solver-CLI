@@ -48,6 +48,24 @@ class Game:
             suggestion = self.suggest()
             result = input("Inter Result [y/g/b]: ")
             self.update(suggestion, result)
+    def likely(self, word):
+        sum = 0
+        for a in self.filtered_words:
+            for i in range(5):
+                if word[i] == a[i]:
+                    sum += 1
+
+        temp = ""
+        for c in word:
+            if c not in temp:
+                temp += c
+        word = temp
+
+        for a in self.filtered_words:
+            for i in range(len(word)):
+                if word[i] in a:
+                    sum += 1.5
+        return sum
 
 
 if __name__ == "__main__":
