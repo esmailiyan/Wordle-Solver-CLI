@@ -41,7 +41,14 @@ class Game:
             if flag:
                 self.filtered_words.append(word)
     def suggest(self):
-        pass
+        value = 0
+        suggest = ""
+        for word in self.filtered_words:
+            if self.likely(word) > value:
+                value = self.likely(word)
+                suggest = word
+        print(f"I',m Suggesting [{suggest}]")
+        return suggest
     def play(self):
         while not self.end:
             self.filter()
@@ -66,7 +73,6 @@ class Game:
                 if word[i] in a:
                     sum += 1.5
         return sum
-
 
 if __name__ == "__main__":
     game = Game()
