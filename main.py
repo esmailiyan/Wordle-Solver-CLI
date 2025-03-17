@@ -55,7 +55,8 @@ class Game:
             self.turn += 1
             self.filter()
             suggestion = ""
-            
+            if len(self.filtered_words) < 10:
+                print(self.filtered_words)
             if self.turn == 1:
                 suggestion = self.suggest()
             elif len(self.filtered_words) == 1:
